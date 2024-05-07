@@ -1,7 +1,9 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import { prisma } from "../../prisma/client";
 
-export default function Home() {
+export default async function Home() {
+  const todos = await prisma.todo.findMany();
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -26,6 +28,14 @@ export default function Home() {
             />
           </a>
         </div>
+      </div>
+
+      <div>
+        <ul>
+          {todos.map((todo) => (
+            <li key={todo.id}>{todo.name}</li>
+          ))}
+        </ul>
       </div>
 
       <div className={styles.center}>
