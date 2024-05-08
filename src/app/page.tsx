@@ -1,9 +1,13 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { prisma } from "../../prisma/client";
+import { auth } from "@/auth";
+import AuthButton from "./AuthButton.server";
 
 export default async function Home() {
   const todos = await prisma.todo.findMany();
+  const session = await auth();
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -30,6 +34,8 @@ export default async function Home() {
         </div>
       </div>
 
+      <div>Hello {session?.user?.name || "NO USER"}</div>
+
       <div>
         <ul>
           {todos.map((todo) => (
@@ -37,6 +43,7 @@ export default async function Home() {
           ))}
         </ul>
       </div>
+      <AuthButton />
 
       <div className={styles.center}>
         <Image
